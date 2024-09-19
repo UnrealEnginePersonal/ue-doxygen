@@ -6792,6 +6792,11 @@ static void findMember(const Entry *root,
     {
       mn=Doxygen::memberNameLinkedMap->find(funcName);
     }
+  	if(mn==nullptr) // try without specialization and _Implementation for unreal engine
+  	{
+  		QCString extraSearch = substitute(funcName, "_Implementation", "");
+  		mn = Doxygen::memberNameLinkedMap->find(extraSearch);
+  	}
     if (!isRelated && !strongEnum && mn) // function name already found
     {
       AUTO_TRACE_ADD("member name exists ({} members with this name)",mn->size());
@@ -7094,7 +7099,6 @@ static void findMember(const Entry *root,
     warn(root->fileName,root->startLine,
          "member with no name found.");
   }
-  return;
 }
 
 //----------------------------------------------------------------------
