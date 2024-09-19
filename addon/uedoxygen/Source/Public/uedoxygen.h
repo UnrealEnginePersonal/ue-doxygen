@@ -7,13 +7,14 @@
 
 #include <string>
 
+struct RunOptions;
+
 namespace doxygen::unreal
 {
 	class uedoxygen
 	{
 	public:
-		static void runDoxygen(const std::string& configFilePath);
-
+		static void runDoxygen(const RunOptions& runOptions);
 	};
 
 } // unreal

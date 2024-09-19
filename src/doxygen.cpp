@@ -109,7 +109,7 @@
 #include "trace.h"
 #include "moduledef.h"
 #include "stringutil.h"
-
+#include "Models/RunOptions.h"
 #include <sqlite3.h>
 
 #if USE_LIBCLANG
@@ -11613,15 +11613,18 @@ bool writeFile(const char* fileName, std::function<void(TextStream&)> func)
 	return false;
 }
 
+
 void readConfigfile(const RunOptions& options)
 {
-	if (!Config::parse(options.configName, options.updateConfig, options.diffList))
+  Config::CompareMode defaultDiffList = Config::CompareMode::Full;
+	if (!Config::parse(options.configName.c_str(), options.updateConfig, defaultDiffList))
 	{
 		err("could not open or read configuration file %s!\n", qPrint(options.configName));
 		cleanUpDoxygen();
 		exit(1);
 	}
 
+	/*
 	if (options.diffList != Config::CompareMode::Full)
 	{
 		Config::updateObsolete();
@@ -11629,17 +11632,18 @@ void readConfigfile(const RunOptions& options)
 		cleanUpDoxygen();
 		exit(0);
 	}
+	*/
 
 	if (options.updateConfig)
 	{
 		Config::updateObsolete();
-		generateConfigFile(options.configName, options.shortList,TRUE);
+		generateConfigFile(options.configName.c_str(), options.shortList,TRUE);
 		cleanUpDoxygen();
 		exit(0);
 	}
 
 	/* Perlmod wants to know the path to the config file.*/
-	FileInfo configFileInfo(options.configName.str());
+	FileInfo configFileInfo(options.configName);
 	setPerlModDoxyfile(configFileInfo.absFilePath());
 
 	/* handle -q option */
@@ -11670,7 +11674,7 @@ void parseMainArgs(const RunOptions& options)
 
 	if (options.genConfig)
 	{
-		generateConfigFile(options.configName, options.shortList);
+		generateConfigFile(options.configName.c_str(), options.shortList);
 		cleanUpDoxygen();
 		exit(0);
 	}

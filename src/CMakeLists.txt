@@ -327,6 +327,11 @@ add_library(doxymain STATIC
 target_link_libraries(doxymain PRIVATE
         spdlog::spdlog
 )
+
+target_link_libraries(doxymain PUBLIC
+        kdsdocs-models-LIB
+)
+
 add_sanitizers(doxymain)
 
 # LLVM/clang headers give a lot of warnings with -Wshadow and -Wcast-align so we disable them for
@@ -388,6 +393,10 @@ if ((CMAKE_BUILD_TYPE STREQUAL "Debug") OR enable_tracing)
     target_compile_definitions(doxymain PRIVATE -DENABLE_TRACING=1)
     target_compile_definitions(doxygen PRIVATE -DENABLE_TRACING=1)
 endif ()
+
+target_link_libraries(doxygen PUBLIC
+        kdsdocs-models-LIB
+)
 
 target_link_libraries(doxygen PRIVATE
         doxymain

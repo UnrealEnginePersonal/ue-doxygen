@@ -4,21 +4,13 @@
 
 #include "uedoxygen.h"
 
-#include <config.h>
 #include <doxygen.h>
+#include <Models/RunOptions.h>
 
 namespace doxygen::unreal
 {
-	void uedoxygen::runDoxygen(const std::string& configFilePath)
+	void uedoxygen::runDoxygen(const RunOptions& runOptions)
 	{
-
-		const QCString configName = configFilePath.c_str();
-		const QCString traceName = "doxygen";
-
-		const RunOptions runOptions = RunOptions(
-			configName, traceName, false, false,
-			Config::CompareMode::Full, false, false, false);
-
 		initDoxygen();
 		parseMainArgs(runOptions);
 

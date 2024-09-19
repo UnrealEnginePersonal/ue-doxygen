@@ -46,6 +46,7 @@ endif()
 
 target_link_libraries(unreal_doxygen
         PUBLIC
+        kdsdocs-models-LIB
         doxymain
         doxygen_version
         doxycfg

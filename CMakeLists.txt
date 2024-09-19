@@ -203,6 +203,7 @@ else ()
   set(JAVACC_FLAGS $(JAVACC_FLAGS))
 endif ()
 
+
 find_program(DOT NAMES dot)
 find_package(Python REQUIRED)
 find_package(FLEX REQUIRED)
@@ -221,6 +222,7 @@ if ((CMAKE_BUILD_TYPE STREQUAL "Debug") OR enable_lex_debug)
 endif()
 
 find_package(Iconv REQUIRED)
+
 include_directories(${Iconv_INCLUDE_DIRS})
 
 
@@ -258,6 +260,9 @@ endif()
 include(cmake/CompilerWarnings.cmake)
 include(cmake/Coverage.cmake)
 include(cmake/WindowsEncoding.cmake)
+
+
+add_subdirectory(models)
 
 add_subdirectory(deps)
 add_subdirectory(libversion)

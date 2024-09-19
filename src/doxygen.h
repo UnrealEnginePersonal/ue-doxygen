@@ -30,6 +30,9 @@
 #define THREAD_LOCAL thread_local
 #define AtomicInt    std::atomic_int
 
+
+struct RunOptions;
+
 namespace Config
 {
   enum class CompareMode;
@@ -159,25 +162,6 @@ public:
   static std::mutex countFlowKeywordsMutex;
   static std::mutex addExampleMutex;
   static StaticInitMap staticInitMap;
-};
-
-struct RunOptions
-{
-  QCString configName;
-  QCString traceName;
-  bool shortList = false;
-  bool traceTiming = false;
-  Config::CompareMode diffList;
-  bool updateConfig = false;
-  bool quiet = false;
-  bool genConfig = false;
-
-  RunOptions(QCString configName_, QCString traceName_, const bool shortList_, const bool traceTiming_,
-             const Config::CompareMode diffList_, const bool updateConfig_, const bool quiet_, const bool genConfig_)
-    : configName(std::move(configName_)), traceName(std::move(traceName_)), shortList(shortList_),
-      traceTiming(traceTiming_), diffList(diffList_), updateConfig(updateConfig_), quiet(quiet_), genConfig(genConfig_)
-  {
-  }
 };
 
 void initDoxygen();
