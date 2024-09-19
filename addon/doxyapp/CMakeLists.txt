@@ -9,9 +9,10 @@ include_directories(
 )
 
 add_executable(doxyapp
-doxyapp.cpp
-${PROJECT_SOURCE_DIR}/templates/icon/doxygen.rc
+    doxyapp.cpp
+    ${PROJECT_SOURCE_DIR}/templates/icon/doxygen.rc
 )
+
 include(ApplyEditbin)
 apply_editbin(doxyapp console)
 add_sanitizers(doxyapp)
@@ -37,21 +38,21 @@ if (use_libclang)
 endif()
 
 target_link_libraries(doxyapp
-doxymain
-md5
-sqlite3
-xml
-lodepng
-mscgen
-doxygen_version
-doxycfg
-vhdlparser
-${Iconv_LIBRARIES}
-${CMAKE_THREAD_LIBS_INIT}
-${SQLITE3_LIBRARIES}
-${EXTRA_LIBS}
-${CLANG_LIBS}
-${COVERAGE_LINKER_FLAGS}
+    doxymain
+    md5
+    sqlite3
+    xml
+    lodepng
+    mscgen
+    doxygen_version
+    doxycfg
+    vhdlparser
+    ${Iconv_LIBRARIES}
+    ${CMAKE_THREAD_LIBS_INIT}
+    ${SQLITE3_LIBRARIES}
+    ${EXTRA_LIBS}
+    ${CLANG_LIBS}
+    ${COVERAGE_LINKER_FLAGS}
 )
 
 install(TARGETS doxyapp DESTINATION bin)

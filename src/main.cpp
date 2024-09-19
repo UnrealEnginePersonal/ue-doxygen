@@ -31,7 +31,7 @@
 int main(int argc,char **argv)
 {
   initDoxygen();
-  readConfiguration(argc,argv);
+  parseMainArgs(argc,argv);
   checkConfiguration();
   adjustConfiguration();
   parseInput();

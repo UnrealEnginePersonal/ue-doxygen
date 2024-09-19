@@ -17,6 +17,7 @@ project(doxygen)
 option("ENABLE_CLANG_TIDY" "Enable static analysis with clang-tidy" OFF)
 
 option(build_wizard    "Build the GUI frontend for doxygen." OFF)
+option(build_uedox     "Build the Unreal library for doxygen." ON)
 option(build_app       "Example showing how to embed doxygen in an application." OFF)
 option(build_parse     "Parses source code and dumps the dependencies between the code elements." OFF)
 option(build_search    "Build external search tools (doxysearch and doxyindexer)" OFF)

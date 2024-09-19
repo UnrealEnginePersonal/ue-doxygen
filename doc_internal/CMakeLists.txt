@@ -19,7 +19,7 @@ else()
     find_package(Doxygen)
 endif()
 
-configure_file(${CMAKE_SOURCE_DIR}/doc_internal/Doxyfile.in "${CMAKE_CURRENT_BINARY_DIR}/Doxyfile" @ONLY)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in "${CMAKE_CURRENT_BINARY_DIR}/Doxyfile" @ONLY)
 
 set(DOC_FILES
         language.tpl
@@ -38,14 +38,14 @@ set_source_files_properties(${PROJECT_BINARY_DIR}/doc_internal/${f} PROPERTIES G
 endforeach()
 
 add_custom_command(
-    COMMAND ${Python_EXECUTABLE} ${CMAKE_SOURCE_DIR}/doc_internal/cmds_tags.py -cmds ${CMAKE_SOURCE_DIR}/doc_internal ${CMAKE_SOURCE_DIR}/doc_internal/commands_history.md ${PROJECT_BINARY_DIR}/doc_internal/commands_history.md
-    DEPENDS ${CMAKE_CURRENT_LIST_DIR}/cmds_tags.py ${CMAKE_SOURCE_DIR}/doc_internal/commands_history.md
+    COMMAND ${Python_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/doc_internal/cmds_tags.py -cmds ${CMAKE_CURRENT_SOURCE_DIR}/doc_internal ${CMAKE_CURRENT_SOURCE_DIR}/doc_internal/commands_history.md ${PROJECT_BINARY_DIR}/doc_internal/commands_history.md
+    DEPENDS ${CMAKE_CURRENT_LIST_DIR}/cmds_tags.py ${CMAKE_CURRENT_SOURCE_DIR}/doc_internal/commands_history.md
     OUTPUT ${PROJECT_BINARY_DIR}/doc_internal/commands_history.md
 )
 
 add_custom_command(
-    COMMAND ${Python_EXECUTABLE} ${CMAKE_SOURCE_DIR}/doc_internal/cmds_tags.py -tags ${CMAKE_SOURCE_DIR}/doc_internal ${CMAKE_SOURCE_DIR}/doc_internal/tags_history.md ${PROJECT_BINARY_DIR}/doc_internal/tags_history.md
-    DEPENDS ${CMAKE_CURRENT_LIST_DIR}/cmds_tags.py ${CMAKE_SOURCE_DIR}/doc_internal/tags_history.md
+    COMMAND ${Python_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/doc_internal/cmds_tags.py -tags ${CMAKE_CURRENT_SOURCE_DIR}/doc_internal ${CMAKE_CURRENT_SOURCE_DIR}/doc_internal/tags_history.md ${PROJECT_BINARY_DIR}/doc_internal/tags_history.md
+    DEPENDS ${CMAKE_CURRENT_LIST_DIR}/cmds_tags.py ${CMAKE_CURRENT_SOURCE_DIR}/doc_internal/tags_history.md
     OUTPUT ${PROJECT_BINARY_DIR}/doc_internal/tags_history.md
 )
 

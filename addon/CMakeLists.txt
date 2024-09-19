@@ -15,3 +15,7 @@ endif ()
 if (build_wizard)
     add_subdirectory(doxywizard)
 endif ()
+
+if(build_uedox)
+    add_subdirectory(uedoxygen)
+endif()
