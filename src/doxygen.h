@@ -188,5 +188,5 @@ void readFileOrDirectory(const QCString& s,
                          StringUnorderedSet* killSet = nullptr,
                          StringUnorderedSet* paths = nullptr
 );
-
+;
 #endif
