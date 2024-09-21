@@ -1,6 +1,11 @@
 find_package(Iconv REQUIRED)
 
-add_library(unreal_doxygen STATIC
+#config project
+add_subdirectory(uedoxygen-config)
+
+
+#add library
+add_library(uedoxygen STATIC
         Source/Private/uedoxygen.cpp
 )
 
@@ -8,9 +13,9 @@ if (use_libclang)
     find_package(LLVM REQUIRED CONFIG)
     find_package(Clang REQUIRED CONFIG)
     if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-        target_compile_features(unreal_doxygen PRIVATE cxx_alignof)
+        target_compile_features(uedoxygen PRIVATE cxx_alignof)
         if (use_libc++)
-            target_compile_options(unreal_doxygen PRIVATE -stdlib=libc++)
+            target_compile_options(uedoxygen PRIVATE -stdlib=libc++)
         endif ()
     endif ()
     include_directories(${LLVM_INCLUDE_DIRS})
@@ -21,11 +26,11 @@ if (use_libclang)
         llvm_config(doxymain USE_SHARED support)
         set(CLANG_LIBS libclang clang-cpp)
     endif ()
-    target_compile_definitions(unreal_doxygen PRIVATE ${LLVM_DEFINITIONS})
+    target_compile_definitions(uedoxygen PRIVATE ${LLVM_DEFINITIONS})
 endif ()
 
 target_include_directories(
-        unreal_doxygen
+        uedoxygen
         PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/Source/Private
         ${GENERATED_SRC}
@@ -34,20 +39,20 @@ target_include_directories(
 )
 
 target_include_directories(
-        unreal_doxygen
+        uedoxygen
         PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/Source/Public
 )
 
 
-target_link_libraries(unreal_doxygen
+target_link_libraries(uedoxygen
     PUBLIC
     kdsdocs-models-LIB
+    uedoxygen-config-LIB
 )
 
-target_link_libraries(unreal_doxygen
+target_link_libraries(uedoxygen
         PRIVATE
-
         doxymain
         md5
         sqlite3
@@ -65,7 +70,7 @@ target_link_libraries(unreal_doxygen
         ${COVERAGE_LINKER_FLAGS}
 )
 
-install(TARGETS unreal_doxygen DESTINATION bin)
+install(TARGETS uedoxygen DESTINATION lib)
 
 
 

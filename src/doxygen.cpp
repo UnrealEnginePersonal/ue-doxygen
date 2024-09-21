@@ -26,91 +26,92 @@
 #include <clocale>
 #include <locale>
 
-#include "version.h"
-#include "doxygen.h"
-#include "scanner.h"
-#include "entry.h"
-#include "index.h"
-#include "indexlist.h"
-#include "message.h"
-#include "config.h"
-#include "util.h"
-#include "pre.h"
-#include "tagreader.h"
-#include "dot.h"
-#include "msc.h"
-#include "docparser.h"
-#include "dirdef.h"
-#include "outputlist.h"
-#include "declinfo.h"
-#include "htmlgen.h"
-#include "latexgen.h"
-#include "mangen.h"
-#include "language.h"
-#include "debug.h"
-#include "htmlhelp.h"
-#include "qhp.h"
-#include "sitemap.h"
-#include "ftvhelp.h"
-#include "defargs.h"
-#include "rtfgen.h"
-#include "sqlite3gen.h"
-#include "xmlgen.h"
-#include "docbookgen.h"
-#include "defgen.h"
-#include "perlmodgen.h"
-#include "reflist.h"
-#include "pagedef.h"
-#include "commentcnv.h"
+#include <Models/DoxygenArguments.h>
+#include <sqlite3.h>
+#include "Models/DoxygenArguments.h"
+#include "aliases.h"
+#include "arguments.h"
+#include "cite.h"
+#include "clangparser.h"
+#include "classlist.h"
 #include "cmdmapper.h"
-#include "searchindex_js.h"
-#include "parserintf.h"
-#include "htags.h"
-#include "pycode.h"
-#include "pyscanner.h"
+#include "code.h"
+#include "commentcnv.h"
+#include "conceptdef.h"
+#include "config.h"
+#include "debug.h"
+#include "declinfo.h"
+#include "defargs.h"
+#include "defgen.h"
+#include "dir.h"
+#include "dirdef.h"
+#include "docbookgen.h"
+#include "docparser.h"
+#include "docsets.h"
+#include "dot.h"
+#include "doxygen.h"
+#include "eclipsehelp.h"
+#include "emoji.h"
+#include "entry.h"
+#include "fileinfo.h"
+#include "filename.h"
+#include "fileparser.h"
+#include "formula.h"
 #include "fortrancode.h"
 #include "fortranscanner.h"
-#include "xmlcode.h"
-#include "sqlcode.h"
+#include "ftvhelp.h"
+#include "groupdef.h"
+#include "htags.h"
+#include "htmlgen.h"
+#include "htmlhelp.h"
+#include "index.h"
+#include "indexlist.h"
+#include "language.h"
+#include "latexgen.h"
+#include "layout.h"
 #include "lexcode.h"
 #include "lexscanner.h"
-#include "code.h"
-#include "portable.h"
-#include "vhdljjparser.h"
-#include "vhdldocgen.h"
-#include "vhdlcode.h"
-#include "eclipsehelp.h"
-#include "cite.h"
+#include "mangen.h"
 #include "markdown.h"
-#include "arguments.h"
-#include "memberlist.h"
-#include "layout.h"
-#include "groupdef.h"
-#include "classlist.h"
-#include "namespacedef.h"
-#include "filename.h"
-#include "membername.h"
 #include "membergroup.h"
-#include "docsets.h"
-#include "formula.h"
-#include "settings.h"
-#include "fileparser.h"
-#include "emoji.h"
-#include "plantuml.h"
-#include "stlsupport.h"
-#include "threadpool.h"
-#include "clangparser.h"
-#include "symbolresolver.h"
-#include "regex.h"
-#include "aliases.h"
-#include "fileinfo.h"
-#include "dir.h"
-#include "conceptdef.h"
-#include "trace.h"
+#include "memberlist.h"
+#include "membername.h"
+#include "message.h"
 #include "moduledef.h"
+#include "msc.h"
+#include "namespacedef.h"
+#include "outputlist.h"
+#include "pagedef.h"
+#include "parserintf.h"
+#include "perlmodgen.h"
+#include "plantuml.h"
+#include "portable.h"
+#include "pre.h"
+#include "pycode.h"
+#include "pyscanner.h"
+#include "qhp.h"
+#include "reflist.h"
+#include "regex.h"
+#include "rtfgen.h"
+#include "scanner.h"
+#include "searchindex_js.h"
+#include "settings.h"
+#include "sitemap.h"
+#include "sqlcode.h"
+#include "sqlite3gen.h"
+#include "stlsupport.h"
 #include "stringutil.h"
-#include "Models/RunOptions.h"
-#include <sqlite3.h>
+#include "symbolresolver.h"
+#include "tagreader.h"
+#include "threadpool.h"
+#include "trace.h"
+#include "util.h"
+#include "version.h"
+#include "vhdlcode.h"
+#include "vhdldocgen.h"
+#include "vhdljjparser.h"
+#include "xmlcode.h"
+#include "xmlgen.h"
 
 #if USE_LIBCLANG
 #include <clang/Basic/Version.h>
@@ -11614,12 +11615,12 @@ bool writeFile(const char* fileName, std::function<void(TextStream&)> func)
 }
 
 
-void readConfigfile(const RunOptions& options)
+void readConfigfile(const doxykds::DoxygenArguments& options)
 {
   Config::CompareMode defaultDiffList = Config::CompareMode::Full;
-	if (!Config::parse(options.configName.c_str(), options.updateConfig, defaultDiffList))
+	if (!Config::parse(options.configFilePath.c_str(), options.updateConfig, defaultDiffList))
 	{
-		err("could not open or read configuration file %s!\n", qPrint(options.configName));
+		err("could not open or read configuration file %s!\n", qPrint(options.configFilePath));
 		cleanUpDoxygen();
 		exit(1);
 	}
@@ -11637,13 +11638,13 @@ void readConfigfile(const RunOptions& options)
 	if (options.updateConfig)
 	{
 		Config::updateObsolete();
-		generateConfigFile(options.configName.c_str(), options.shortList,TRUE);
+		generateConfigFile(options.configFilePath.c_str(), options.shortList,TRUE);
 		cleanUpDoxygen();
 		exit(0);
 	}
 
 	/* Perlmod wants to know the path to the config file.*/
-	FileInfo configFileInfo(options.configName);
+	FileInfo configFileInfo(options.configFilePath);
 	setPerlModDoxyfile(configFileInfo.absFilePath());
 
 	/* handle -q option */
@@ -11658,7 +11659,7 @@ void createLayoutAndExit(const QCString& layoutName)
 	exit(0);
 }
 
-void parseMainArgs(const RunOptions& options)
+void parseMainArgs(const doxykds::DoxygenArguments& options)
 {
 	QCString versionString = getFullVersion();
 	/**************************************************************************
@@ -11674,7 +11675,7 @@ void parseMainArgs(const RunOptions& options)
 
 	if (options.genConfig)
 	{
-		generateConfigFile(options.configName.c_str(), options.shortList);
+		generateConfigFile(options.configFilePath.c_str(), options.shortList);
 		cleanUpDoxygen();
 		exit(0);
 	}

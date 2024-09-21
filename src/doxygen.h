@@ -27,11 +27,11 @@
 #include "symbolmap.h"
 #include "searchindex.h"
 
+
 #define THREAD_LOCAL thread_local
 #define AtomicInt    std::atomic_int
 
 
-struct RunOptions;
 
 namespace Config
 {
@@ -164,10 +164,13 @@ public:
   static StaticInitMap staticInitMap;
 };
 
+namespace doxykds
+{
+  struct DoxygenArguments;
+}
+
 void initDoxygen();
-
-
-void parseMainArgs(const RunOptions& options);
+void parseMainArgs(const doxykds::DoxygenArguments& options);
 
 void checkConfiguration();
 void adjustConfiguration();

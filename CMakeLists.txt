@@ -222,9 +222,7 @@ if ((CMAKE_BUILD_TYPE STREQUAL "Debug") OR enable_lex_debug)
 endif()
 
 find_package(Iconv REQUIRED)
-
 include_directories(${Iconv_INCLUDE_DIRS})
-
 
 #set(DOXYDOCS ${PROJECT_SOURCE_DIR}/doc CACHE INTERNAL "Path to doxygen docs")
 set(DOXYDOCS ${PROJECT_BINARY_DIR}/doc)
@@ -300,3 +298,5 @@ add_subdirectory(testing)
 
 include(cmake/packaging.cmake) # set CPACK_xxxx properties
 include(CPack)
+
+include(cmake/IconV.cmake)
