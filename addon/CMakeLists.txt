@@ -17,6 +17,7 @@ if (build_wizard)
 endif ()
 
 if(build_uedox)
+    #[[add_subdirectory(uelogger)]]
     add_subdirectory(uedoxygen)
     include(${PROJECT_SOURCE_DIR}/cmake/IconV.cmake)
     add_custom_target(copyIconVLibs ALL)

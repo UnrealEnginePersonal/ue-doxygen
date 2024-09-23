@@ -300,3 +300,10 @@ include(cmake/packaging.cmake) # set CPACK_xxxx properties
 include(CPack)
 
 include(cmake/IconV.cmake)
+add_custom_target(COMBINE_LIBS_WIT_LIB_COMBINER_PY ALL
+
+    COMMAND ${PYTHON_EXECUTABLE} ${PROJECT_SOURCE_DIR}/scripts/lib_combiner.py
+    WORKING_DIRECTORY ${PROJECT_BINARY_DIR}/lib --ldir ${PROJECT_BINARY_DIR}/lib/Debug --out ${PROJECT_BINARY_DIR}/lib/Combined.lib
+    COMMENT "Combining libraries"
+    VERBATIM
+)

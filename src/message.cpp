@@ -26,6 +26,8 @@
 #include "fileinfo.h"
 #include "dir.h"
 
+#include <NFLogging.h>
+
 // globals
 static QCString        g_warnFormat;
 static QCString        g_warnLineFormat;
@@ -94,19 +96,45 @@ void initWarningFormat()
   });
 }
 
+std::string formatMsg(const char *fmt, va_list args)
+{
+  va_list argsCopy;
+  va_copy(argsCopy, args);  // Copy args because vsnprintf consumes it
+  size_t bufSize = vsnprintf(nullptr, 0, fmt, argsCopy);
+  va_end(argsCopy);  // Always call va_end after using va_copy
+
+  std::string text(bufSize, '\0');
+
+  va_copy(argsCopy, args);  // Copy again to use the args
+  vsnprintf(&text[0], bufSize + 1, fmt, argsCopy);
+  va_end(argsCopy);
+
+  return text;
+}
 
 void msg(const char *fmt, ...)
 {
   if (!Config_getBool(QUIET))
   {
     std::unique_lock<std::mutex> lock(g_mutex);
+
     if (Debug::isFlagSet(Debug::Time))
     {
-      printf("%.3f sec: ",(static_cast<double>(Debug::elapsedTime())));
+      printf("%.3f sec: ", static_cast<double>(Debug::elapsedTime()));
     }
+
     va_list args;
     va_start(args, fmt);
-    vfprintf(stdout, fmt, args);
+
+    // Format the message using the argument list
+    std::string formattedMsg = formatMsg(fmt, args);
+
+    // Log using the formatted message
+    nf::log::log("DOXYGEN_MSG", formattedMsg, nf::log::Level::Info);
+
+    // Output to stdout
+    vprintf(fmt, args);
+
     va_end(args);
   }
 }
@@ -136,12 +164,16 @@ static void format_warn(const QCString &file,int line,const QCString &text)
   {
     msgText += " (warning treated as error, aborting now)";
   }
+  const std::string& msgTextStr = msgText.str();
+ // nf::log::warning("Doxygen",msgTextStr);
+
   msgText += '\n';
 
   {
     std::unique_lock<std::mutex> lock(g_mutex);
     // print resulting message
     fwrite(msgText.data(),1,msgText.length(),g_warnFile);
+
   }
   if (g_warnBehavior == WARN_AS_ERROR_t::YES)
   {
@@ -304,8 +336,6 @@ void warn_flush()
 {
   fflush(g_warnFile);
 }
-
-
 
 extern void finishWarnExit()
 {

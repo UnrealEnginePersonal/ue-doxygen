@@ -1,4 +1,6 @@
 # vim:ts=4:sw=4:expandtab:autoindent:
+MESSAGE(STATUS "CmakeSourceDir: ${CMAKE_CURRENT_SOURCE_DIR}")
+include(${CMAKE_SOURCE_DIR}/cmake/NFLogger.cmake)
 
 include_directories(
         ${PROJECT_SOURCE_DIR}/deps/TinyDeflate
@@ -211,6 +213,11 @@ add_library(doxycfg STATIC
         debug.cpp
         trace.cpp
 )
+
+target_link_libraries(doxycfg PUBLIC
+        NFLogging
+)
+
 target_link_libraries(doxycfg PRIVATE
         spdlog::spdlog
 )
@@ -324,13 +331,17 @@ add_library(doxymain STATIC
         xmldocvisitor.cpp
         xmlgen.cpp
 )
+
 target_link_libraries(doxymain PRIVATE
         spdlog::spdlog
+        NFLogging
 )
+
 
 target_link_libraries(doxymain PUBLIC
         kdsdocs-models-LIB
 )
+
 
 add_sanitizers(doxymain)
 

@@ -1,12 +1,18 @@
 find_package(Iconv REQUIRED)
 
+MESSAGE(STATUS "CmakeSourceDir: ${CMAKE_CURRENT_SOURCE_DIR}")
+include(${CMAKE_SOURCE_DIR}/cmake/NFLogger.cmake)
+
 #config project
 add_subdirectory(uedoxygen-config)
-
-
 #add library
 add_library(uedoxygen STATIC
         Source/Private/uedoxygen.cpp
+)
+
+target_link_libraries(uedoxygen
+    PUBLIC
+    NFLogging
 )
 
 if (use_libclang)
@@ -53,6 +59,7 @@ target_link_libraries(uedoxygen
 
 target_link_libraries(uedoxygen
         PRIVATE
+        #[[uelogger]]
         doxymain
         md5
         sqlite3

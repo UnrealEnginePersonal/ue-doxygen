@@ -11,21 +11,7 @@
 #include <utility>
 #include <vector>
 
-
-// You can override the default assert handler by editing uedoxygenconfig/source/uedoxygenconfig.h
-/*#ifndef UEDOXYGEN_ASSERT_OR_RETURN
-#include <cassert>
-#define UEDOXYGEN_ASSERT_OR_RETURN(_EXPR) assert(_EXPR)
-#endif*/
-
-#ifndef UEDOXYGEN_ASSERT
-#include <cassert>
-#define UEDOXYGEN_ASSERT(_EXPR, _MSG) assert(_EXPR && _MSG)
-#endif
-
-#ifndef UEDOXYGEN_INFO
-#define UEDOXYGEN_INFO(_MSG) std::cout << _MSG << std::endl;
-#endif
+extern __declspec(dllexport) void DoxygenLogForwarder(const char* logMessage);
 
 namespace doxykds
 {
@@ -95,13 +81,18 @@ namespace doxykds
     {
     public:
       explicit DocsGenerator(const GeneratorProperties &runOptions);
-      static void reinitializeShouldAssert();
+
+      void initialize();
+      void checkGeneratedConfig();
+      void adjustConfig();
+      void generate();
+      void clear();
 
     private:
       const std::shared_ptr<GeneratorProperties> p_Properties;
     };
   }; // namespace unreal
-} // namespace doxygen
+} // namespace doxykds
 // doxygen
 
 #endif // UEDOXYGEN_H
