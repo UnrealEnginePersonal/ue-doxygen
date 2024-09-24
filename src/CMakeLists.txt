@@ -1,6 +1,6 @@
 # vim:ts=4:sw=4:expandtab:autoindent:
 MESSAGE(STATUS "CmakeSourceDir: ${CMAKE_CURRENT_SOURCE_DIR}")
-include(${CMAKE_SOURCE_DIR}/cmake/NFLogger.cmake)
+include(${CMAKE_SOURCE_DIR}/cmake/NightmareFuel/NFLogger.cmake)
 
 include_directories(
         ${PROJECT_SOURCE_DIR}/deps/TinyDeflate

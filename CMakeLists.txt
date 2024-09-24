@@ -14,6 +14,18 @@
 cmake_minimum_required(VERSION 3.14)
 project(doxygen)
 
+##Set Generator To Visual Studio 17 2022
+################# DEFAULT #################
+include(cmake/NightmareFuel/defaults-cmake-var.cmake)
+include(cmake/NightmareFuel/defaults-cpp.cmake)
+include(cmake/NightmareFuel/debug-config.cmake)
+include(cmake/NightmareFuel/setup-libs-for-unreal.cmake)
+include(cmake/NightmareFuel/print-info.cmake)
+
+
+
+add_compile_definitions(GHC_WITH_EXCEPTIONS)
+
 option("ENABLE_CLANG_TIDY" "Enable static analysis with clang-tidy" OFF)
 
 option(build_wizard    "Build the GUI frontend for doxygen." OFF)
