@@ -214,7 +214,7 @@ add_library(doxycfg STATIC
         trace.cpp
 )
 
-target_link_libraries(doxycfg PUBLIC
+target_link_libraries(doxycfg PRIVATE
         NFLogging
 )
 

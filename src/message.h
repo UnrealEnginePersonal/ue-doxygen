@@ -26,7 +26,7 @@
 #define PRINTFLIKE(FORMAT, PARAM )
 #endif
 
-extern void msg(const char *fmt, ...) PRINTFLIKE(1,2);
+extern std::string msg(const char *fmt, ...) PRINTFLIKE(1,2);
 extern void warn_(const QCString &file,int line,const char *fmt, ...) PRINTFLIKE(3, 4);
 extern void va_warn(const QCString &file, int line, const char* fmt, va_list args);
 extern void warn_undoc_(const QCString &file,int line,const char *fmt, ...) PRINTFLIKE(3, 4);

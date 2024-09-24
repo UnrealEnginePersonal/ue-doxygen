@@ -36,20 +36,16 @@ adjustConfiguration();
 parseInput();
 generateOutput();
 ***************/
-#define UEDOXLOG_T(msg) nf::log::log("UEDOXYGEN: ", msg, NFLOG_LVL::Info)
+#define UEDOXLOG_C "UEDOXYGEN"
+#define UEDOXLOG_T(msg) nf::log::info(UEDOXLOG_C, msg)
+
 namespace doxykds::unreal
 {
   inline static bool G_doxygenInitialized = false;
 
-  static void Log(const std::string &msg)
-  {
-    UEDOXLOG_T(msg);
-  }
-
   static void init()
   {
-    //UEDOXYGEN_ASSERT(G_doxygenInitialized, "Doxygen already initialized.");
-
+    UEDOXLOG_T("Initializing Doxygen.");
     initDoxygen();
     G_doxygenInitialized = true;
   }
@@ -58,20 +54,21 @@ namespace doxykds::unreal
   {
     char tempPath[MAX_PATH];
 
+    std::string result = std::filesystem::temp_directory_path().string();
     if (const DWORD pathLen = GetTempPath(MAX_PATH, tempPath); pathLen > 0 && pathLen < MAX_PATH)
     {
-      return {tempPath};
+      result = tempPath;
     }
-
+    UEDOXLOG_T("Temp path: " + result);
     // Handle error (could throw an exception or return an empty string)
-    return std::filesystem::temp_directory_path().string();
+    return result;
   }
 
   static bool createDirectoryRecursive(const std::string &dirPath)
   {
-    std::string currentPath = "";
-    size_t      pos         = 0;
-    bool        result      = true;
+    std::string currentPath;
+    size_t      pos    = 0;
+    bool        result = true;
 
     // Iterate over each directory in the path
     while ((pos = dirPath.find_first_of("\\/", pos)) != std::string::npos)
@@ -80,7 +77,7 @@ namespace doxykds::unreal
       if (!currentPath.empty() && GetFileAttributes(currentPath.c_str()) == INVALID_FILE_ATTRIBUTES)
       {
         // Create directory if it doesn't exist
-        if (!CreateDirectory(currentPath.c_str(), NULL))
+        if (!CreateDirectory(currentPath.c_str(), nullptr))
         {
           /*kds::uelog::uelogger::log("Failed to create directory: " + currentPath);*/
           nf::log::error((R"(Failed to create directory: ")" + currentPath));
@@ -93,7 +90,7 @@ namespace doxykds::unreal
     // Create the final directory in the path
     if (result && GetFileAttributes(dirPath.c_str()) == INVALID_FILE_ATTRIBUTES)
     {
-      result = CreateDirectory(dirPath.c_str(), NULL);
+      result = CreateDirectory(dirPath.c_str(), nullptr);
       if (!result)
       {
         nf::log::error((R"(Failed to create directory: ")" + dirPath));
@@ -221,7 +218,7 @@ namespace doxykds::unreal
 
   static std::filesystem::path generateTempUEDoxyFile(
     const std::string               projectName,
-    const std::string               projectVersion,
+    const std::string               projectVersion, //todo: implement version
     const std::string               tagFileOutputPath,
     const std::string               outputPath,
     const std::vector<std::string> &inputFiles,
@@ -325,14 +322,6 @@ namespace doxykds::unreal
     UEDOXLOG_T("Doxygen run completed.");
   }
 
-  void DocsGenerator::clear()
-  {
-    UEDOXLOG_T("Clearing all.");
-    clearAll();
-    G_doxygenInitialized = false;
-    UEDOXLOG_T("Doxygen cleared.");
-
-  }
 
   /*initDoxygen();*/
   /*parseMainArgs(runOptions);*/
@@ -351,7 +340,3 @@ namespace doxykds::unreal
 
 } // namespace doxykds::unreal
 // doxykds
-void DoxygenLogForwarder(const char *logMessage)
-{
-  UEDOXLOG_T(logMessage);
-}

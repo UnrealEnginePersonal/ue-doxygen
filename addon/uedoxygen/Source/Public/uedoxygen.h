@@ -86,8 +86,6 @@ namespace doxykds
       void checkGeneratedConfig();
       void adjustConfig();
       void generate();
-      void clear();
-
     private:
       const std::shared_ptr<GeneratorProperties> p_Properties;
     };
