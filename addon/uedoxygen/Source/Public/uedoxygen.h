@@ -5,10 +5,8 @@
 #ifndef UEDOXYGEN_H
 #define UEDOXYGEN_H
 
-#include <UeDoxConfig.h>
 #include <memory>
 #include <string>
-#include <utility>
 #include <vector>
 
 extern __declspec(dllexport) void DoxygenLogForwarder(const char* logMessage);

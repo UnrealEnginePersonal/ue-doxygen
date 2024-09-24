@@ -1,7 +1,7 @@
 find_package(Iconv REQUIRED)
 
 MESSAGE(STATUS "CmakeSourceDir: ${CMAKE_CURRENT_SOURCE_DIR}")
-include(${CMAKE_SOURCE_DIR}/cmake/NFLogger.cmake)
+include(${CMAKE_SOURCE_DIR}/cmake/NightmareFuel/NFLogger.cmake)
 
 #config project
 add_subdirectory(uedoxygen-config)
@@ -76,8 +76,6 @@ target_link_libraries(uedoxygen
         ${CLANG_LIBS}
         ${COVERAGE_LINKER_FLAGS}
 )
-
-install(TARGETS uedoxygen DESTINATION lib)
 
 
 

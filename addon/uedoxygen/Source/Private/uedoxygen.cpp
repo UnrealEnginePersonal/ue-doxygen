@@ -119,7 +119,9 @@ namespace doxykds::unreal
     }
     else
     {
-      UEDOXYGEN_ASSERT(false, (R"(Failed to find placeholder: "%s")", placeHolder));
+      nf::log::error(UEDOXLOG_C, "(Failed to find placeholder: " + placeHolder.str());
+
+      /*UEDOXYGEN_ASSERT(false, (R"(Failed to find placeholder: "%s")", placeHolder));*/
       return;
     }
   }
@@ -173,7 +175,7 @@ namespace doxykds::unreal
   static std::string generate_input_str(const std::vector<std::string> &inputs)
   {
     UEDOXLOG_T("Generating input string.");
-    UEDOXYGEN_ASSERT(!inputs.empty(), "Input files list is empty.");
+    /*UEDOXYGEN_ASSERT(!inputs.empty(), "Input files list is empty.");*/
 
     // Generate the string with input directories
     std::ostringstream result;
@@ -233,7 +235,8 @@ namespace doxykds::unreal
 
     if (doxyFileTemplate.isEmpty())
     {
-      UEDOXYGEN_ASSERT(false, (R"(Failed to read Doxyfile template: "%s")", "DoxyFile"));
+      /*UEDOXYGEN_ASSERT(false, (R"(Failed to read Doxyfile template: "%s")", "DoxyFile"));*/
+      UEDOXLOG_T("Failed to read Doxyfile template: DoxyFile");
       return {};
     }
 
